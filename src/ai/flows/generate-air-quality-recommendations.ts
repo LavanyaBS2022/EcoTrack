@@ -41,9 +41,8 @@ const prompt = ai.definePrompt({
   model: 'googleai/gemini-2.0-flash',
   input: {schema: AirQualityRecommendationsInputSchema},
   output: {schema: AirQualityRecommendationsOutputSchema},
-  prompt: `You are an expert in environmental science, specializing in air quality improvement.
-
-  Based on the current air quality data and user preferences, provide personalized recommendations to improve air quality.
+  system: 'You are an expert in environmental science. Respond ONLY with a valid JSON object that matches the provided output schema, containing personalized recommendations to improve air quality. Do not include any other text, formatting, or explanations.',
+  prompt: `Based on the current air quality data and user preferences, provide personalized recommendations to improve air quality.
 
   Current Air Quality Data:
   PM2.5: {{{airQualityData.pm25}}} μg/m³
@@ -54,9 +53,7 @@ const prompt = ai.definePrompt({
 
   User Preferences:
   Location: {{{userPreferences.location}}}
-  Interests: {{{userPreferences.interests}}}
-
-  Recommendations:`, // Ensure the prompt ends with the key of the desired output
+  Interests: {{{userPreferences.interests}}}`,
 });
 
 const generateAirQualityRecommendationsFlow = ai.defineFlow(
