@@ -38,6 +38,7 @@ export async function generateAirQualityRecommendations(input: AirQualityRecomme
 
 const prompt = ai.definePrompt({
   name: 'airQualityRecommendationsPrompt',
+  model: 'googleai/gemini-2.0-flash',
   input: {schema: AirQualityRecommendationsInputSchema},
   output: {schema: AirQualityRecommendationsOutputSchema},
   prompt: `You are an expert in environmental science, specializing in air quality improvement.
@@ -66,6 +67,9 @@ const generateAirQualityRecommendationsFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error("The AI failed to generate valid recommendations. The response may have been blocked or did not match the required format.");
+    }
+    return output;
   }
 );
